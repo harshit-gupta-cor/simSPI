@@ -6,19 +6,25 @@ import torch.fft
 class wp_simulator(torch.nn.Module):
     def __init__(self, config, initial_volume=None):
         super(wp_simulator, self).__init__()
-        self.Projector = Projector(config)
-        self.init_volume(initial_volume)
-        self.CTF = CTF(config)
-        self.Shift = Shift(config)
-        self.Noise = Noise(config)
+        '''module that generates data using weak phase approximation with a given config setting. 
+            projector->ctf->shift->noise
+        '''
+        self.Projector = Projector(config) #tomographic projector
+        self.init_volume(initial_volume)   #changes the volume inside the projector
+        self.CTF = CTF(config)             #convolves ctf
+        self.Shift = Shift(config)         #adds shifts
+        self.Noise = Noise(config)         #adds noise
         self.config = config
 
     def forward(self):
+
+        #generate the parameter of the forward model
         rotmat=self.rotmat_generator()
         ctf_params=self.ctf_generator()
         shift_params=self.shift_generator()
         noise_params=self.noise_generator()
 
+        #apply the forward model
         projection=self.Projector(rotmat)
         f_projection=primal_to_fourier_2D(projection)
         f_projection=self.CTF(f_projection,ctf_params)
