@@ -7,7 +7,7 @@ import mrcfile
 
 #could be sent to iospi
 parser = argparse.ArgumentParser()
-parser.add_argument('config', default="Configs/parameters_generate_dataset.cfg", help="Specify config file", metavar="FILE")
+parser.add_argument('config', default="configs/parameters_generate_dataset.cfg", help="Specify config file", metavar="FILE")
 args = parser.parse_args()
 config=cfg(args.config)
 
