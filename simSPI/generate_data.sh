@@ -1,0 +1,1 @@
+python wp_dataset_generator.py configs/parameters_generate_dataset.cfg
